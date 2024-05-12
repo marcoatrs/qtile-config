@@ -14,6 +14,7 @@ explorer = f"{terminal} -e ranger" # Explorador de archivos
 music = "spotify-launcher" # Reproductor de musica
 menu = "dmenu_run" # Lanzador de aplicaciones
 tabs = "rofi -show" # Ver apps abiernas
+font = "Hack Nerd Font Mono"
 
 
 def start_autostart():
@@ -65,7 +66,7 @@ mouse = [
 
 
 # Groups
-_items = ["   ", "   ", "   ", " 󰯉  ", "   ", "   ", "   ", "   ", "   "]
+_items = ["  ", "  ", "  ", " 󰯉 ", "  ", "  ", "  ", "  ", "  "]
 groups = []
 for i, item in enumerate(_items):
     group = Group(item, layout="monadtall")
@@ -89,11 +90,18 @@ layouts = [
     layout.Stack(num_stacks=2)
 ]
 
+# Configs
+groups_configs = {
+    "font": font,
+    "fontsize": 25,
+    "disable_drag": True
+}
+
 
 screens = [
     Screen(top=bar.Bar([
-        widget.GroupBox(),    # display the current Group
-        widget.Battery(),      # display the battery state
+        widget.GroupBox(**groups_configs),      # display the current Group
+        widget.Battery(),                       # display the battery state
         widget.CurrentLayout()
        ], 30))
    ]
