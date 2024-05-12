@@ -5,6 +5,8 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile import bar, widget, hook, layout
 
+from theme import get_theme
+
 
 # VARIABLES
 mod = "mod4" # Tecla Windows
@@ -15,6 +17,7 @@ music = "spotify-launcher" # Reproductor de musica
 menu = "dmenu_run" # Lanzador de aplicaciones
 tabs = "rofi -show" # Ver apps abiernas
 font = "Hack Nerd Font Mono"
+theme = get_theme("material-ocean")
 
 
 def start_autostart():
@@ -94,7 +97,24 @@ layouts = [
 groups_configs = {
     "font": font,
     "fontsize": 25,
-    "disable_drag": True
+    "disable_drag": True,
+    "foreground": theme.light,
+    "background": theme.dark,
+    "active": theme.active,
+    "inactive": theme.inactive,
+    "margin_y":3,
+    "margin_x":0,
+    "padding_y":8,
+    "padding_x":5,
+    "borderwidth":1,
+    "rounded":False,
+    "highlight_method":'block',
+    "urgent_alert_method":'block',
+    "urgent_border":theme.urgent,
+    "this_current_screen_border":theme.focus,
+    "this_screen_border":theme.grey,
+    "other_current_screen_border":theme.dark,
+    "other_screen_border":theme.dark,
 }
 
 
