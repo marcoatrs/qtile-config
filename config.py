@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from libqtile.command import lazy
-from libqtile.config import Group, Match, Screen, Key
+from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile import bar, widget, hook, layout
 
 
@@ -31,9 +31,20 @@ keys = [
     # System
     Key([mod, "shift"], "q", lazy.shutdown(), desc="Cerrar sesion"),
     Key([mod, "shift"], "r", lazy.restart(), desc="Recargar QTile"),
+    Key([mod], "tab", lazy.next_layout(), desc="Cambio de layout arriba"),
+    Key([mod, "shift"], "tab", lazy.prev_layout(), desc="Cambio de layout abajo"),
 
     # Window
     Key([mod], "w", lazy.window.kill(), desc="Cerrar ventana"),
+    Key([mod], "Down", lazy.layout.down(), desc="Mover focus abajo"),
+    Key([mod], "Up", lazy.layout.up(), desc="Mover focus arriba"),
+    Key([mod], "Left", lazy.layout.left(), desc="Mover focus izquierda"),
+    Key([mod], "Right", lazy.layout.right(), desc="Mover focus derecha"),
+    Key([mod, "shift"], "h", lazy.layout.grow(), desc="Mas grande"),
+    Key([mod, "shift"], "s", lazy.layout.shrink(), desc="Mas chico"),
+    Key([mod], "f", lazy.window.toggle_floating(), desc="Cambiar entre flotante"),
+    Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), desc="Cambio de ventana abajo"),
+    Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), desc="Cambio de ventana arriba"),
 
     # Apps
     Key([mod], "Return", lazy.spawn(terminal), desc="Abrir el terminal"),
@@ -43,6 +54,14 @@ keys = [
     Key([mod], "m", lazy.spawn(menu), desc="Abrir menu de aplicaciones"),
     Key([mod, "shift"], "m", lazy.spawn(tabs), desc="Ver aplicaciones abiertas")
    ]
+
+
+# Mouse
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front())
+]
 
 
 # Groups
