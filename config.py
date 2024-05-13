@@ -5,7 +5,7 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile import bar, widget, hook, layout
 
-from theme import get_theme
+from theme import ColorTheme, get_theme
 
 
 # VARIABLES
@@ -13,15 +13,16 @@ mod = "mod4" # Tecla Windows
 browser = "brave" # Navegador
 terminal = "alacritty" # Consola
 explorer = f"{terminal} -e ranger" # Explorador de archivos
+explorer2 = "Thunar" # Explorador alternativo (GUI)
 music = "spotify-launcher" # Reproductor de musica
 menu = "dmenu_run" # Lanzador de aplicaciones
 tabs = "rofi -show" # Ver apps abiernas
-font = "Hack Nerd Font Mono"
-theme = get_theme("material-ocean")
+font = "Hack Nerd Font Mono" #  Fuente
+theme = get_theme("material-darker") # Tema
 
 
 def start_autostart():
-    wallpaper = "/home/marco/.config/qtile/wallpaper.jpg" #Path(__file__).parent / "wallpaper.jpg"
+    wallpaper = Path(__file__).parent / "nss-wallpaper.jpg"
     commands = [
         "picom &",
         f"feh --bg-fill {wallpaper} &",
@@ -69,7 +70,7 @@ mouse = [
 
 
 # Groups
-_items = ["  ", "  ", "  ", " 󰯉 ", "  ", "  ", "  ", "  ", "  "]
+_items = ["", "", "", "󰯉", "", "", "", "", ""]
 groups = []
 for i, item in enumerate(_items):
     group = Group(item, layout="monadtall")
@@ -93,37 +94,66 @@ layouts = [
     layout.Stack(num_stacks=2)
 ]
 
+def base_colors(fg: str, bg: str):
+    return {"foreground": fg, "background": bg}
+
+
 # Configs
 groups_configs = {
     "font": font,
-    "fontsize": 25,
+    "fontsize": 30,
     "disable_drag": True,
-    "foreground": theme.light,
-    "background": theme.dark,
+    **base_colors(theme.light, theme.dark),
     "active": theme.active,
     "inactive": theme.inactive,
-    "margin_y":3,
-    "margin_x":0,
-    "padding_y":8,
-    "padding_x":5,
-    "borderwidth":1,
-    "rounded":False,
-    "highlight_method":'block',
-    "urgent_alert_method":'block',
-    "urgent_border":theme.urgent,
-    "this_current_screen_border":theme.focus,
-    "this_screen_border":theme.grey,
-    "other_current_screen_border":theme.dark,
-    "other_screen_border":theme.dark,
+    "margin_y": 3,
+    "margin_x": 0,
+    "padding_y": 8,
+    "padding_x": 5,
+    "borderwidth": 1,
+    "rounded": False,
+    "highlight_method": 'block',
+    "urgent_alert_method": 'block',
+    "urgent_border": theme.urgent,
+    "this_current_screen_border": theme.focus,
+    "this_screen_border": theme.grey,
+    "other_current_screen_border": theme.dark,
+    "other_screen_border": theme.dark,
 }
+
+def separator():
+    return widget.Sep(**base_colors(theme.light, theme.dark), linewidth=0, padding=6)
+
+
+def icon(fg=None, bg=None, fontsize=16, text="."):
+    return widget.TextBox(
+        **base_colors(fg, bg),
+        fontsize=fontsize,
+        text=text,
+        padding=3
+    )
 
 
 screens = [
     Screen(top=bar.Bar([
-        widget.GroupBox(**groups_configs),      # display the current Group
-        widget.Battery(),                       # display the battery state
-        widget.CurrentLayout()
-       ], 30))
+        widget.Spacer(**base_colors(theme.light, theme.dark), length=40),
+        widget.GroupBox(visible_groups=_items, **groups_configs),
+        separator(),
+        widget.CurrentLayoutIcon(**base_colors(theme.text, theme.color2), scale=0.65),
+        widget.CurrentLayout(**base_colors(theme.text, theme.color2), padding=5),
+        separator(),
+        widget.WindowName(**base_colors(theme.focus, theme.dark), fontsize=14, padding=5),
+        widget.Spacer(**base_colors(theme.light, theme.dark)),
+        separator(),
+        widget.Systray(background=theme.dark, padding=5),
+        separator(),
+        widget.Clock(**base_colors(theme.light, theme.dark), fontsize=15, format='%Y-%m-%d - %H:%M '),
+        separator(),
+        widget.Spacer(**base_colors(theme.light, theme.dark), length=40)
+       ], 
+       size=30,
+       margin=10,
+       rounded=True))
    ]
 lazy.group.setlayout("monadtall")
 
