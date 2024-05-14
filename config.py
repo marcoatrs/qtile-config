@@ -40,6 +40,11 @@ keys = [
     Key([mod, "shift"], "r", lazy.restart(), desc="Recargar QTile"),
     Key([mod], "tab", lazy.next_layout(), desc="Cambio de layout arriba"),
     Key([mod, "shift"], "tab", lazy.prev_layout(), desc="Cambio de layout abajo"),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"), desc="Subir volumen"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"), desc="Bajar volumen"),
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"), desc="Mute"),
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +10%"), desc="Subir brillo"),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 10%-"), desc="Bajar brillo"),
 
     # Window
     Key([mod], "w", lazy.window.kill(), desc="Cerrar ventana"),
@@ -135,6 +140,7 @@ def icon(fg=None, bg=None, fontsize=16, text="."):
         padding=3
     )
 
+volume_emojis = ["", "", "", ""]
 
 screens = [
     Screen(top=bar.Bar([
@@ -147,6 +153,8 @@ screens = [
         widget.WindowName(**base_colors(theme.focus, theme.dark), fontsize=14, padding=5),
         widget.Spacer(**base_colors(theme.light, theme.dark)),
         separator(),
+        # widget.Volume(update_interval=0.5, get_volume_command=),
+        # separator(),
         widget.Systray(background=theme.dark, padding=5),
         separator(),
         widget.Clock(**base_colors(theme.light, theme.dark), fontsize=15, format='%Y-%m-%d - %H:%M '),
