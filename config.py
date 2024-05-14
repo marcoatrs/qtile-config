@@ -19,6 +19,8 @@ menu = "dmenu_run" # Lanzador de aplicaciones
 tabs = "rofi -show" # Ver apps abiernas
 font = "Hack Nerd Font Mono" #  Fuente
 theme = get_theme("material-darker") # Tema
+power_menu_script = Path(__file__).parent / "rofi-power-menu"
+power_menu = f"rofi -show power-menu -modi power-menu:{power_menu_script}"
 
 
 def start_autostart():
@@ -34,7 +36,7 @@ def start_autostart():
 # Shortcuts
 keys = [
     # System
-    Key([mod, "shift"], "q", lazy.shutdown(), desc="Cerrar sesion"),
+    Key([mod, "shift"], "q", lazy.spawn(power_menu), desc="Menu de apagado"),
     Key([mod, "shift"], "r", lazy.restart(), desc="Recargar QTile"),
     Key([mod], "tab", lazy.next_layout(), desc="Cambio de layout arriba"),
     Key([mod, "shift"], "tab", lazy.prev_layout(), desc="Cambio de layout abajo"),
