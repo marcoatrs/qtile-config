@@ -3,7 +3,7 @@ from pathlib import Path
 
 from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
-from libqtile import bar, widget, hook, layout
+from libqtile import bar, widget, hook, layout, qtile
 
 from theme import ColorTheme, get_theme
 
@@ -140,7 +140,18 @@ def icon(fg=None, bg=None, fontsize=16, text="."):
         padding=3
     )
 
+# Bar 
+def open_calendar():  # spawn calendar widget
+    qtile.spawn('gsimplecal next_month')
+
+
+def close_calendar():  # kill calendar widget
+    qtile.spawn('killall -q gsimplecal')
+
+
+mouse_callbacks = {"Button1": open_calendar, "Button3": close_calendar}
 volume_emojis = ["", "", "", ""]
+
 
 screens = [
     Screen(top=bar.Bar([
@@ -157,7 +168,7 @@ screens = [
         # separator(),
         widget.Systray(background=theme.dark, padding=5),
         separator(),
-        widget.Clock(**base_colors(theme.light, theme.dark), fontsize=15, format='%Y-%m-%d - %H:%M '),
+        widget.Clock(**base_colors(theme.light, theme.dark), fontsize=15, format='%Y-%m-%d - %H:%M', mouse_callbacks=mouse_callbacks),
         separator(),
         widget.Spacer(**base_colors(theme.light, theme.dark), length=40)
        ], 
