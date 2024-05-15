@@ -5,6 +5,7 @@ from libqtile.command import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile import bar, widget, hook, layout, qtile
 
+from arrow import left_arrow, right_arrow
 from theme import ColorTheme, get_theme
 
 
@@ -108,9 +109,9 @@ def base_colors(fg: str, bg: str):
 # Configs
 groups_configs = {
     "font": font,
-    "fontsize": 30,
+    "fontsize": 25,
     "disable_drag": True,
-    **base_colors(theme.light, theme.dark),
+    **base_colors(theme.light, theme.color4),
     "active": theme.active,
     "inactive": theme.inactive,
     "margin_y": 3,
@@ -155,25 +156,35 @@ volume_emojis = ["", "", "", ""]
 
 screens = [
     Screen(top=bar.Bar([
+        left_arrow(theme.dark, None),
         widget.Spacer(**base_colors(theme.light, theme.dark), length=40),
+        left_arrow(theme.color4, theme.dark),
         widget.GroupBox(visible_groups=_items, **groups_configs),
-        separator(),
+        right_arrow(theme.color4, theme.dark),
+        left_arrow(theme.color2, theme.dark),
         widget.CurrentLayoutIcon(**base_colors(theme.text, theme.color2), scale=0.65),
-        widget.CurrentLayout(**base_colors(theme.text, theme.color2), padding=5),
-        separator(),
-        widget.WindowName(**base_colors(theme.focus, theme.dark), fontsize=14, padding=5),
+        widget.CurrentLayout(**base_colors(theme.text, theme.color2), padding=5, font=font),
+        right_arrow(theme.color2, theme.dark),
+        widget.WindowName(**base_colors(theme.focus, theme.dark), fontsize=14, padding=5, font=font),
         widget.Spacer(**base_colors(theme.light, theme.dark)),
-        separator(),
-        # widget.Volume(update_interval=0.5, get_volume_command=),
-        # separator(),
+        left_arrow(theme.color2, theme.dark),
+        widget.Volume(
+            fmt="󰕾 {}",
+            background=theme.color2,
+            get_volume_command="pamixer --get-volume"
+        ),
+        right_arrow(theme.color2, theme.dark),
+        left_arrow(theme.color3, theme.dark),
         widget.Systray(background=theme.dark, padding=5),
-        separator(),
-        widget.Clock(**base_colors(theme.light, theme.dark), fontsize=15, format='%Y-%m-%d - %H:%M', mouse_callbacks=mouse_callbacks),
-        separator(),
-        widget.Spacer(**base_colors(theme.light, theme.dark), length=40)
+        right_arrow(theme.color3, theme.dark),
+        left_arrow(theme.color1, theme.dark),
+        widget.Clock(**base_colors(theme.light, theme.color1), font=font, fontsize=15, format='%Y-%m-%d - %H:%M', mouse_callbacks=mouse_callbacks),
+        right_arrow(theme.color1, theme.dark),
+        widget.Spacer(**base_colors(theme.light, theme.dark), length=40),
+        right_arrow(theme.dark, None),
        ], 
-       size=30,
-       margin=10,
+       size=35,
+       margin=5,
        rounded=True))
    ]
 lazy.group.setlayout("monadtall")
