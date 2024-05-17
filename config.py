@@ -33,7 +33,7 @@ def start_autostart():
     for command in commands:
         os.system(command)
 
-
+from libqtile.widget import backlight
 # Shortcuts
 keys = [
     # System
@@ -112,8 +112,8 @@ groups_configs = {
     "fontsize": 25,
     "disable_drag": True,
     **base_colors(theme.light, theme.color4),
-    "active": theme.active,
-    "inactive": theme.inactive,
+    "active": theme.inactive,
+    "inactive": theme.active,
     "margin_y": 3,
     "margin_x": 0,
     "padding_y": 8,
@@ -141,7 +141,7 @@ def icon(fg=None, bg=None, fontsize=16, text="."):
         padding=3
     )
 
-# Bar 
+# Bar
 def open_calendar():  # spawn calendar widget
     qtile.spawn('gsimplecal next_month')
 
@@ -153,17 +153,16 @@ def close_calendar():  # kill calendar widget
 mouse_callbacks = {"Button1": open_calendar, "Button3": close_calendar}
 volume_emojis = ["", "", "", ""]
 
-
 screens = [
     Screen(top=bar.Bar([
         left_arrow(theme.dark, None),
         widget.Spacer(**base_colors(theme.light, theme.dark), length=40),
         left_arrow(theme.color2, theme.dark),
         widget.CurrentLayoutIcon(**base_colors(theme.text, theme.color2), scale=0.65),
-        widget.CurrentLayout(**base_colors(theme.text, theme.color2), padding=5, font=font),
+        widget.CurrentLayout(**base_colors(theme.text, theme.color2), padding=5, font=font, fontsize=15),
         right_arrow(theme.color2, theme.dark),
         separator(),
-        widget.WindowName(**base_colors(theme.focus, theme.dark), fontsize=14, padding=5, font=font),
+        widget.WindowName(**base_colors(theme.focus, theme.dark), fontsize=15, padding=5, font=font),
         widget.Spacer(**base_colors(theme.light, theme.dark)),
         left_arrow(theme.color4, theme.dark),
         widget.GroupBox(visible_groups=_items, **groups_configs),
@@ -172,10 +171,23 @@ screens = [
         left_arrow(theme.color2, theme.dark),
         widget.Volume(
             fmt="󰕾 {}",
+            font=font,
+            fontsize=15,
             background=theme.color2,
-            get_volume_command="pamixer --get-volume"
+            get_volume_command="pamixer --get-volume-human"
         ),
         right_arrow(theme.color2, theme.dark),
+
+        left_arrow(theme.color4, theme.dark),
+        widget.BatteryIcon(**base_colors(theme.text, theme.color4), scale=1.5),
+        widget.Battery(**base_colors(theme.text, theme.color4), font=font, fontsize=15, charge_char="󰁝", discharge_char="󰁅", format="{char} {percent:2.0%}"),
+        right_arrow(theme.color4, theme.dark),
+
+        left_arrow(theme.grey, theme.dark),
+        widget.TextBox(**base_colors(theme.light, theme.grey), fmt="󰃞 ", font=font, fontsize=15),
+        widget.Backlight(**base_colors(theme.light, theme.grey), backlight_name="intel_backlight", font=font, fontsize=15),
+        right_arrow(theme.grey, theme.dark),
+
         left_arrow(theme.color3, theme.dark),
         widget.Systray(background=theme.dark, padding=5),
         right_arrow(theme.color3, theme.dark),
@@ -184,7 +196,7 @@ screens = [
         right_arrow(theme.color1, theme.dark),
         widget.Spacer(**base_colors(theme.light, theme.dark), length=40),
         right_arrow(theme.dark, None),
-       ], 
+       ],
        size=35,
        margin=5,
        rounded=True))
